@@ -27,12 +27,15 @@ if(!empty($_FILES['file']['tmp_name'])){
 function saveToDB($file){
     echo "得到檔案".$file."<br>";
     echo "準備進行資料處理......";
+
+    $resource=fopen($file,'a+');
+    while(!feof($file)){
+        echo fgets($file)."<br>";
+
+    }
 }
 
-
 ?>
-
-
 
 
 ?>
