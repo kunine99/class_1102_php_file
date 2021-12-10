@@ -1,10 +1,10 @@
 <?php
 
-$str="abcdefghijklmn";
-$len=rand(1,9);
-echo $len;
-echo mb_substr($str,rand(0,(strlen($str)-1)),1);  //亂數產生一個英文
-echo "<br>";
+// $str="abcdefghijklmn";
+// $len=rand(1,9);
+// echo $len;
+// echo mb_substr($str,rand(0,(strlen($str)-1)),1);  //亂數產生一個英文
+// echo "<br>";
 
 
 
@@ -42,19 +42,51 @@ $length=rand(4,8);
 }
  echo $str;
 
- $dstimg=imagecreatetruecolor(200,50);
+ $padding=10;
+
+ $fontBox=imagettfbbox(30,30,realpath('./font/arial.ttf'),$str);
+
+ $x_array=[$fontBox[0],$fontBox[2],$fontBox[4],$fontBox[6]];
+ $y_array=[$fontBox[1],$fontBox[3],$fontBox[5],$fontBox[7]];
+
+ $fw=(max($x_array)-min($x_array));
+ $fh=(max($y_array)-min($y_array));
+
+ $w=$fw+$padding;
+ $h=$fh+$padding;
+
+ $dstimg=imagecreatetruecolor($w,$h);
  $white=imagecolorallocate($dstimg,200,200,180);
  $black=imagecolorallocate($dstimg,0,0,0);
  imagefill($dstimg,0,0,$white);
- for($i=0;$i<$length;$i++){
-     $c=mb_substr($str,$i,1);
-     imagestring($dstimg,5,(10+$i*rand(15,20)),(10+rand(0,10)),$c,$black);
+//  for($i=0;$i<$length;$i++){
+//      $c=mb_substr($str,$i,1);
+//      imagestring($dstimg,5,(10+$i*rand(15,20)),(10+rand(0,10)),$c,$black);
 
- }
+//  }
+
+// 先算圖的大小
+//
+//算基底
+
+$start_x=$padding/2+(0-min($x_array));
+$start_y=($padding/2)+$fh-max($y_array);
+imagettftext($dstimg,30,30,$start_x,$start_y,$black,realpath('./font/arial.ttf'),$str);
 
 
- imagepng($dstimg,'captcha.png');
+// $fontBox=imagettfbbox(20,30,'./font/arial.ttf')
+
+imagepng($dstimg,'captcha.png');
+
+
 
 ?>
 
-<img src="captcha.png" alt="">
+<p><img src="captcha.png" alt=""></p>
+<?php
+echo "<br>w=>".$w."<br>";
+echo "h=>".$h;
+echo "<pre>";
+print_r($fontBox);
+echo "</pre>";
+?>
